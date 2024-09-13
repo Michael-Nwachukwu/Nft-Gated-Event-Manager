@@ -45,7 +45,7 @@ contract EventContract {
      * @param _speakers The list of speakers for the event.
      * @param _locationName The location of the event.
     */
-    function createEvent(string memory _eventName, uint256 _eventDate, string[] memory _speakers, string memory  _locationName ) external onlyOwner {
+    function createEvent(string memory _eventName, uint256 _eventDate, string[] memory _speakers, string memory  _locationName, uint256 _duration ) external onlyOwner {
         
         require(msg.sender != address(0), "Invalid input");
         require(bytes(_eventName).length > 0, "Title cant be empty");
@@ -59,7 +59,7 @@ contract EventContract {
         _event.id = _eventId;
         _event.eventName = _eventName;
         _event.eventDate = _eventDate;
-        _event.duration = 3 days;
+        _event.duration = _duration;
         _event.endDate = block.timestamp + _event.duration;
         _event.speakers = _speakers;
         _event.eventLocationName = _locationName;

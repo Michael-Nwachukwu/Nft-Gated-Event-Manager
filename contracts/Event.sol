@@ -3,7 +3,8 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract Name {
+contract EventContract {
+
     address owner;
     IERC721 requiredNftAddress;
     uint256 eventCount;
@@ -36,6 +37,14 @@ contract Name {
 
     event EventCreated();
 
+    /**
+     * Creates a new event.
+     *
+     * @param _eventName The name of the event.
+     * @param _eventDate The date of the event.
+     * @param _speakers The list of speakers for the event.
+     * @param _locationName The location of the event.
+    */
     function createEvent(string memory _eventName, uint256 _eventDate, string[] memory _speakers, string memory  _locationName ) external onlyOwner {
         
         require(msg.sender != address(0), "Invalid input");
@@ -61,9 +70,9 @@ contract Name {
 
     }
 
-    // 0x9d6e23b6B029BEaC49C43679304D32fDBf88F42A
-    // ["kemi", "samson", "michael", "levi"]
-
+    /**
+     * @param _eventId The ID of the event to register for.
+    */
     function registerForEvent(uint256 _eventId) external {
         require(msg.sender != address(0), "Invalid input");
         Event storage _event = events[_eventId];
@@ -78,14 +87,31 @@ contract Name {
         registeredAddresses[_eventId].push(msg.sender);
     }
 
+    /**
+     * Returns the list of attendees for an event.
+     *
+     * @param _eventId The ID of the event to retrieve attendees for.
+     * @return The list of attendees for the event.
+     */
     function getAttendees(uint256 _eventId) external view returns (address[] memory) {
         return registeredAddresses[_eventId];
     }
 
+    /**
+     * Returns whether the sender has registered for an event.
+     *
+     * @param _eventId The ID of the event to check registration for.
+     * @return Whether the sender has registered for the event.
+    */
     function checkUserRegistration(uint256 _eventId) external view returns (bool) {
         return hasRegistered[msg.sender][_eventId];
     }
 
+    /**
+     * Returns the list of all events.
+     *
+     * @return The list of all events.
+    */
     function getEvents() external view returns (Event[] memory) {
         Event[] memory allEvents = new Event[](eventCount);
         for(uint256 i = 1; i <= eventCount; i++) {

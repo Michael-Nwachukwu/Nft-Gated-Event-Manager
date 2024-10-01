@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract EventContract {
 
-    address owner;
-    IERC721 requiredNftAddress;
-    uint256 eventCount;
+    address public owner;
+    IERC721 public requiredNftAddress;
+    uint256 public eventCount;
 
     constructor(address _requiredNftAddress) {
         owner = msg.sender;
@@ -50,7 +50,7 @@ contract EventContract {
         require(msg.sender != address(0), "Invalid input");
         require(bytes(_eventName).length > 0, "Title cant be empty");
         require(bytes(_locationName).length > 0, "Location cant be empty");
-        require(_eventDate > block.timestamp);
+        require(_eventDate > block.timestamp, "Date must be future");
 
         uint256 _eventId = eventCount + 1;
 
